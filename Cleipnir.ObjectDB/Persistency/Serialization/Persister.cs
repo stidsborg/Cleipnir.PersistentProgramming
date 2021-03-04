@@ -29,14 +29,21 @@ namespace Cleipnir.ObjectDB.Persistency.Serialization
             _maxObjectId = serializers.NextObjectId - 1;
         }
 
-        public void Serialize()
+        public void DetectSerializeAndPersistChanges(bool checkForCircularDependencies = false)
         {
             var detectedChanges = DetectChanges();
             if (detectedChanges.GarbageCollectableIds.Empty() &&
                 detectedChanges.RemovedEntries.Empty() &&
                 detectedChanges.NewEntries.Empty())
                 return;
-            
+
+            if (checkForCircularDependencies)
+            {
+                var (isCircular, path) = CircularDependencyDetector.Check(root: _serializers[0], _stateMaps, _serializers);
+                if (isCircular)
+                    throw new CircularDependencyException(path);
+            }
+
             _storageEngine.Persist(detectedChanges);
         }
 

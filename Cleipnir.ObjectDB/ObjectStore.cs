@@ -28,7 +28,6 @@ namespace Cleipnir.ObjectDB
         }
 
         //Used when data exists
-        //todo make construct private
         private ObjectStore(
             RootsInstance roots, 
             StateMaps stateMaps, Serializers serializers,
@@ -45,7 +44,7 @@ namespace Cleipnir.ObjectDB
         public T Resolve<T>() => Roots.Resolve<T>();
         public IEnumerable<T> ResolveAll<T>() => Roots.ResolveAll<T>();
 
-        public void Persist() => _persister.Serialize();
+        public void Persist(bool checkForCircularDependencies = false) => _persister.DetectSerializeAndPersistChanges(checkForCircularDependencies);
 
         public static ObjectStore Load(IStorageEngine storageEngine, params object[] ephemeralInstances)
         {

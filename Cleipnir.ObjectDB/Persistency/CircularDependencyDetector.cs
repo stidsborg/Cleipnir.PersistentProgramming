@@ -6,9 +6,9 @@ using Cleipnir.Persistency.Persistency;
 
 namespace Cleipnir.ObjectDB.Persistency
 {
-    internal class CircularDependencyDetector
+    internal static class CircularDependencyDetector
     {
-        public CircularPath Check(ISerializer root, StateMaps stateMaps, Serializers serializers)
+        public static CircularPath Check(ISerializer root, StateMaps stateMaps, Serializers serializers)
         {
             var visited = new HashSet<ISerializer>();
             var stack = new Stack<SerializerAndPath>();
