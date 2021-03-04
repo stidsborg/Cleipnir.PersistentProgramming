@@ -1,34 +1,76 @@
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Cleipnir.ObjectDB.Persistency.Serialization.Serializers;
+using Cleipnir.Persistency.Persistency;
 
 namespace Cleipnir.ObjectDB.Persistency
 {
     internal class CircularDependencyDetector
     {
-        public ImmutableList<object> Check(ISerializer root, StateMaps stateMaps) 
-            => Check(root, ImmutableList<ISerializer>.Empty, stateMaps)
-                .Select(s => s.Instance)
-                .ToImmutableList();
-
-        private ImmutableList<ISerializer> Check(ISerializer curr, ImmutableList<ISerializer> visited, StateMaps stateMaps)
+        public CircularPath Check(ISerializer root, StateMaps stateMaps, Serializers serializers)
         {
-            if (visited.Contains(curr))
-                return visited.Append(curr).Aggregate(
-                    ImmutableList<ISerializer>.Empty,
-                    (l, s) => l.Any() || s == curr ? l.Add(s) : l
+            var visited = new HashSet<ISerializer>();
+            var stack = new Stack<SerializerAndPath>();
+            var refsQueue = new Queue<ISerializer>();
+            
+            refsQueue.Enqueue(root);
+            
+            while (refsQueue.Count > 0)
+            {
+                stack.Push(
+                    new SerializerAndPath(refsQueue.Dequeue(),
+                        ImmutableList<ISerializer>.Empty)
                 );
 
-            visited = visited.Add(curr);
-            
-            foreach (var serializer in stateMaps.Get(curr.Id).GetReferencedSerializers())
-            {
-                var circularChain = Check(serializer, visited, stateMaps);
-                if (circularChain.Count > 0)
-                    return circularChain;
+                while (stack.Count > 0)
+                {
+                    var (curr, path) = stack.Pop();
+
+                    if (visited.Contains(curr))
+                        continue;
+                    visited.Add(curr);
+
+                    path = path.Add(curr);
+
+                    if (curr is ReferenceSerializer)
+                    {
+                        var reference = (Reference) curr.Instance;
+                        if (reference.Id.HasValue)
+                            refsQueue.Enqueue(serializers[reference.Id.Value]);
+                        continue;
+                    }
+                    
+                    var referencedSerializers = stateMaps
+                        .Get(curr.Id)
+                        .GetReferencedSerializers();
+                    
+                    foreach (var referencedSerializer in referencedSerializers)
+                    {
+                        if (path.Contains(referencedSerializer))
+                        {
+                            var circularPath = path
+                                .Append(referencedSerializer)
+                                .Aggregate(
+                                    ImmutableList<object>.Empty,
+                                    (l, s) => l.Any() || s == referencedSerializer ? l.Add(s.Instance) : l
+                                );
+                            return new CircularPath(true, circularPath);
+                        }
+                        
+                        stack.Push(new SerializerAndPath(referencedSerializer, path));
+                    }
+                }
             }
 
-            return ImmutableList<ISerializer>.Empty;
+            return new CircularPath(false, Enumerable.Empty<object>());
+        }
+
+        private record SerializerAndPath(ISerializer Serializer, ImmutableList<ISerializer> Path);
+
+        internal record CircularPath(bool IsCircular, IEnumerable<object> Path)
+        {
+            public override string ToString() => string.Join("->", Path.Select(o => o.ToString()));
         }
     }
 }
