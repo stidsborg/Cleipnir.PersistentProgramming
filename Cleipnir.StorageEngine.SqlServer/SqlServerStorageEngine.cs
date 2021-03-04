@@ -14,7 +14,7 @@ namespace Cleipnir.StorageEngine.SqlServer
         private readonly string _instanceId;
         private readonly string _connectionString;
 
-        private bool _initialized;
+        private volatile bool _initialized;
 
         public SqlServerStorageEngine(string instanceId, string connectionString)
         {
@@ -33,13 +33,19 @@ namespace Cleipnir.StorageEngine.SqlServer
         public void Clear()
         {
             using var connection = CreateConnection();
-            connection.Execute($@"DELETE FROM KeyValues WHERE InstanceId='{_instanceId}';");
+            connection.Execute($@"
+                DELETE FROM KeyValues WHERE InstanceId='{_instanceId}';
+                DELETE FROM SerializerTypes WHERE InstanceId='{_instanceId}';"
+            );
         }
 
         public void DropTables()
         {
             using var connection = CreateConnection();
-            connection.Execute("DROP TABLE  IF EXISTS KeyValues");
+            connection.Execute(@"
+                DROP TABLE IF EXISTS KeyValues;
+                DROP TABLE IF EXISTS SerializerTypes;"
+            );
         }
 
         public bool Exist
@@ -82,6 +88,8 @@ namespace Cleipnir.StorageEngine.SqlServer
 
         public void Persist(DetectedChanges detectedChanges)
         {
+            if (_initialized) Initialize();
+
             using var connection = CreateConnection();
             using var transaction = connection.BeginTransaction();
 
@@ -126,7 +134,10 @@ namespace Cleipnir.StorageEngine.SqlServer
             connection.Execute(@$"
                 DELETE kv 
                 FROM KeyValues AS kv
-                INNER JOIN #GarbageCollectables AS gc ON kv.ObjectId = gc.ObjectId AND kv.InstanceId = '{_instanceId}';",
+                INNER JOIN #GarbageCollectables AS gc ON kv.ObjectId = gc.ObjectId AND kv.InstanceId = '{_instanceId}';
+                DELETE s 
+                FROM SerializerTypes AS s
+                INNER JOIN #GarbageCollectables AS gc ON s.ObjectId = gc.ObjectId AND s.InstanceId = '{_instanceId}';",
                 transaction: transaction
             );
         }
@@ -156,21 +167,26 @@ namespace Cleipnir.StorageEngine.SqlServer
 
         private void AddSerializerTypes(IEnumerable<ObjectIdAndType> serializerTypes, SqlConnection connection, SqlTransaction transaction)
         {
-            const string sql = @"
-                INSERT INTO SerializerTypes 
-                    (InstanceId, ObjectId, SerializerType) 
-                VALUES 
-                    (@InstanceId, @ObjectId, @SerializerType)";
+            var dataTable = new DataTable("#SerializerTypes");
 
-            connection.Execute(
-                sql,
-                serializerTypes.Select(ot => new
-                {
-                    InstanceId = _instanceId,
-                    ObjectId = ot.ObjectId,
-                    SerializerType = ot.SerializerType.SimpleQualifiedName()
-                }),
-                transaction: transaction);
+            var instanceId = new DataColumn("InstanceId", typeof(string));
+            var objectId = new DataColumn("ObjectId", typeof(long));
+            var key = new DataColumn("SerializerType", typeof(string));
+
+            var columns = new[] { instanceId, objectId, key };
+            dataTable.Columns.AddRange(columns);
+
+            foreach (var serializerType in serializerTypes)
+            {
+                dataTable.Rows.Add(
+                    _instanceId,
+                    serializerType.ObjectId,
+                    serializerType.SerializerType.SimpleQualifiedName()
+                );
+            }
+            
+            using var bulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.KeepIdentity, transaction) { DestinationTableName = "SerializerTypes" };
+            bulkCopy.WriteToServer(dataTable);
         }
         
         private void UpsertEntries(IEnumerable<StorageEntry> entries, SqlConnection connection, SqlTransaction transaction)
@@ -218,34 +234,55 @@ namespace Cleipnir.StorageEngine.SqlServer
 
         public StoredState Load()
         {
-            throw new NotImplementedException();/*
             if (!_initialized) Initialize();
+
             using var connection = CreateConnection();
 
-            var entries = connection
-                .Query<Entry>($"SELECT * FROM KeyValues WHERE InstanceId='{_instanceId}'")
-                .ToList();
+            var keyValueEntries = connection
+                .Query<KeyValueEntry>($"SELECT * FROM KeyValues WHERE InstanceId='{_instanceId}'");
 
-            var toReturn =  entries
-                .Select(e => 
+            var serializerTypeEntries = connection
+                .Query<SerializerTypeEntry>($"SELECT ObjectId, SerializerType FROM SerializerTypes WHERE InstanceId='{_instanceId}'");
+
+            var keyValues = keyValueEntries
+                .Select(e =>
                     new StorageEntry(
-                        e.ObjectId,
-                        e.Key,
-                        e.ValueType == null ? null : JsonConvert.DeserializeObject(e.Value, Type.GetType(e.ValueType)),
-                        e.Reference
+                        objectId: e.ObjectId,
+                        key: e.Key,
+                        value: e.ValueType == null
+                            ? null
+                            : JsonConvert.DeserializeObject(e.Value, Type.GetType(e.ValueType)),
+                        reference: e.Reference
                     )
-                ).ToList();
+                );
 
-            return toReturn;*/
+            var serializerTypes = serializerTypeEntries
+                .Select(e => new {e.ObjectId, Type = Type.GetType(e.SerializerType)});
+
+            var storedState = new StoredState(
+                serializerTypes.ToDictionary(
+                    e => e.ObjectId,
+                    e => e.Type),
+                keyValues
+                    .GroupBy(kv => kv.ObjectId, kv => kv)
+                    .ToDictionary(g => g.Key, g => g.AsEnumerable())
+                );
+            return storedState;
         }
 
-        public class Entry 
+        private class KeyValueEntry 
         {
             public long ObjectId { get; set; }
             public string Key { get; set; }
             public string Value { get; set; }
             public string ValueType { get; set; }
             public long? Reference { get; set; }
+        }
+
+        private class SerializerTypeEntry
+        {
+            public long ObjectId { get; set; }
+            public string SerializerType { get; set; }
         }
 
         public void Dispose() { } //todo clear temp created tables

@@ -6,7 +6,7 @@ namespace Cleipnir.Tests.SqlServerStorageEngine
 {
     internal class TestHelper
     {
-        private static readonly string ConnectionString = DatabaseHelper.ConnectionString("localhost", "SagaTest", "sa", "Pa55word");
+        private static readonly string ConnectionString = DatabaseHelper.ConnectionString("localhost", "CleipnirTests", "sa", "Pa55word");
         public StorageEngine.SqlServer.SqlServerStorageEngine StorageEngineEngine { get; } = new StorageEngine.SqlServer.SqlServerStorageEngine("TEST", ConnectionString);
 
         public TestHelper()

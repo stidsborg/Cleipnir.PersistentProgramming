@@ -25,6 +25,11 @@ namespace Cleipnir.Tests.SqlServerStorageEngine
             p.SetValue("HELLO WORLD");
             os.Persist();
 
+            ObjectStore.Load(testHelper.StorageEngineEngine)
+                .Resolve<P>()
+                .GetValue()
+                .ShouldBe("HELLO WORLD");
+            
             using var conn = testHelper.CreateConnection(); 
             conn.QuerySingle<int>(@"
                     SELECT COUNT(*)
@@ -34,6 +39,11 @@ namespace Cleipnir.Tests.SqlServerStorageEngine
 
             p.RemoveValue();
             os.Persist();
+            
+            ObjectStore.Load(testHelper.StorageEngineEngine)
+                .Resolve<P>()
+                .GetValue()
+                .ShouldBeNull();
 
             conn.QuerySingle<int>(@"
                     SELECT COUNT(*)
@@ -47,6 +57,7 @@ namespace Cleipnir.Tests.SqlServerStorageEngine
             private string _value;
 
             public void SetValue(string value) => _value = value;
+            public string GetValue() => _value;
 
             public void RemoveValue() => _value = null;
 
