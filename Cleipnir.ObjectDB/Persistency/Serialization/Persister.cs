@@ -66,8 +66,8 @@ namespace Cleipnir.ObjectDB.Persistency.Serialization
 
                 serializer.Serialize(stateMap, serializationHelper);
 
-                //if the serializer is a reference and it points to another object enqueue that objets serializer  
-                //note that the reference only holds long. thus, without special handling we would not serialize
+                //if the serializer is a Reference and it points to another object, then enqueue that objet's serializer  
+                //please note that the Reference only holds a long. thus, without special handling we would not serialize
                 //what it is pointing to 
                 if (serializer.Instance is Reference r && r.Id.HasValue)
                     readyToBeSerializeds.Enqueue(_serializers[r.Id.Value]);
