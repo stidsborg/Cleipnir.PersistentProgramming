@@ -2,7 +2,7 @@
 using System.Threading;
 using Cleipnir.ObjectDB.TaskAndAwaitable.Awaitables;
 
-namespace Cleipnir.ExecutionEngine
+namespace Cleipnir.ExecutionEngine.Api
 {
     public static class Sync
     {

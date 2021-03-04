@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Cleipnir.ExecutionEngine;
+using Cleipnir.ExecutionEngine.Api;
 
 namespace Cleipnir.Tests.Helpers
 {

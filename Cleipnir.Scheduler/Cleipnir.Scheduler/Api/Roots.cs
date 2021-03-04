@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using Cleipnir.ObjectDB.Persistency;
 
-namespace Cleipnir.ExecutionEngine
+namespace Cleipnir.ExecutionEngine.Api
 {
     public static class Roots
     {

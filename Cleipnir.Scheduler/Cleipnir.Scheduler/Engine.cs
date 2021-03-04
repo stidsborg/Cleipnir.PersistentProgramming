@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Cleipnir.ExecutionEngine.Api;
 using Cleipnir.Helpers;
 using Cleipnir.ObjectDB.TaskAndAwaitable.Awaitables;
 using Cleipnir.ObjectDB.TaskAndAwaitable.StateMachine;
@@ -157,7 +158,7 @@ namespace Cleipnir.ExecutionEngine
         {
             var tcs = new TaskCompletionSource();
             Scheduler.FireAndForget(
-                () => Cleipnir.ExecutionEngine.Sync.AfterNext(() => Task.Run(tcs.SetResult), false)
+                () => Api.Sync.AfterNext(() => Task.Run(tcs.SetResult), false)
             );
 
             return tcs.Task;
