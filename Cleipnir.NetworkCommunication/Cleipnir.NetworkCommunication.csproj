@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Cleipnir.ExecutionEngine\Cleipnir.ExecutionEngine.csproj" />
     <ProjectReference Include="..\Cleipnir.Helpers\Cleipnir.Helpers.csproj" />
-    <ProjectReference Include="..\Cleipnir.Scheduler\Cleipnir.Scheduler\Cleipnir.ExecutionEngine.csproj" />
   </ItemGroup>
 
   <ItemGroup>

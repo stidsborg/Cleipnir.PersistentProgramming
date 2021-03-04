@@ -7,7 +7,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Cleipnir.ExecutionEngine.Providers\Cleipnir.ExecutionEngine.Providers.csproj" />
     <ProjectReference Include="..\Cleipnir.Rx\Cleipnir.Rx\Cleipnir.Rx.csproj" />
-    <ProjectReference Include="..\Cleipnir.Scheduler\Cleipnir.Scheduler\Cleipnir.ExecutionEngine.csproj" />
   </ItemGroup>
 
 </Project>
