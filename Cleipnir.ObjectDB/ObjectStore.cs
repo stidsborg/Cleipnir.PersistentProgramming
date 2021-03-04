@@ -39,7 +39,8 @@ namespace Cleipnir.ObjectDB
             _persister = new Persister(StorageEngine, Roots, serializers, stateMaps);
         }
 
-        public void Attach(object toAttach) => Roots.Entangle(toAttach);
+        public void Entangle(object toEntangle) => Roots.Entangle(toEntangle);
+        public void Untangle(object toUntangle) => Roots.Untangle(toUntangle);
 
         public T Resolve<T>() => Roots.Resolve<T>();
         public IEnumerable<T> ResolveAll<T>() => Roots.ResolveAll<T>();

@@ -67,7 +67,7 @@ namespace Cleipnir.Tests.DataStructureTests
 
         private void AttachAndPersist<T>(T t)
         {
-            ObjectStore.Attach(t);
+            ObjectStore.Entangle(t);
             ObjectStore.Persist();
         }
 

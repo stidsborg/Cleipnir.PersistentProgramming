@@ -25,9 +25,9 @@ namespace Cleipnir.Tests.ReactiveTests
             source.Emit(1);
             valueHolder.Value.ShouldBe(1);
 
-            os.Attach(source);
-            os.Attach(awaitable);
-            os.Attach(valueHolder);
+            os.Entangle(source);
+            os.Entangle(awaitable);
+            os.Entangle(valueHolder);
 
             os.Persist();
 

@@ -18,8 +18,8 @@ namespace Cleipnir.Tests.ReactiveTests
             var valueHolder = new ValueHolder();
             source.CallOnEvent(valueHolder.SetValue);
             var store = ObjectStore.New(storage);
-            store.Attach(source);
-            store.Attach(valueHolder);
+            store.Entangle(source);
+            store.Entangle(valueHolder);
             store.Persist();
 
             store = ObjectStore.Load(storage, true, (IScheduler) new MockScheduler());
@@ -37,8 +37,8 @@ namespace Cleipnir.Tests.ReactiveTests
             var valueHolder = new ValueHolder();
             source.Select(_ => _).CallOnEvent(valueHolder.SetValue);
             var store = ObjectStore.New(storage);
-            store.Attach(source);
-            store.Attach(valueHolder);
+            store.Entangle(source);
+            store.Entangle(valueHolder);
             store.Persist();
 
             store = ObjectStore.Load(storage, true, (IScheduler) new MockScheduler());
@@ -62,8 +62,8 @@ namespace Cleipnir.Tests.ReactiveTests
 
             holder.Value.ShouldBe(3);
 
-            store.Attach(source);
-            store.Attach(holder);
+            store.Entangle(source);
+            store.Entangle(holder);
 
             store.Persist();
 

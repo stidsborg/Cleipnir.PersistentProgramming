@@ -20,7 +20,7 @@ namespace Cleipnir.Tests.DataStructureTests
             
             l.ToArray().Length.ShouldBe(0);
 
-            os.Attach(l);
+            os.Entangle(l);
             os.Persist();
 
             os = ObjectStore.Load(storage, true);
@@ -39,7 +39,7 @@ namespace Cleipnir.Tests.DataStructureTests
 
             l.ToArray()[0].ShouldBe(1);
 
-            os.Attach(l);
+            os.Entangle(l);
             os.Persist();
 
             os = ObjectStore.Load(storage, true);

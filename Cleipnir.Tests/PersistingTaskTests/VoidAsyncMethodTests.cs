@@ -24,8 +24,8 @@ namespace Cleipnir.Tests.PersistingTaskTests
             
             AsyncMethodTest(a1, a2, value);
 
-            os.Attach(tuple);
-            os.Attach(value);
+            os.Entangle(tuple);
+            os.Entangle(value);
             os.Persist();
 
             os = ObjectStore.Load(storage, true);

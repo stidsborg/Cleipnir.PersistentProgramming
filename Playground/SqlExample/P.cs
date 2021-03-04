@@ -25,7 +25,7 @@ namespace Playground.SqlExample
             p1.Other = p2;
 
             var objectStore = ObjectStore.New(storage);
-            objectStore.Attach(p1);
+            objectStore.Entangle(p1);
 
             objectStore.Persist();
 

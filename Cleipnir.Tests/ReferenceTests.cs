@@ -31,7 +31,7 @@ namespace Cleipnir.Tests
         {
             var reference = new Reference(10);
 
-            ObjectStore.Attach(reference);
+            ObjectStore.Entangle(reference);
             ObjectStore.Persist();
 
             ObjectStore = ObjectStore.Load(StorageEngine, false);
@@ -44,7 +44,7 @@ namespace Cleipnir.Tests
         {
             var reference = new Reference(new Simple() {Value = "1234"});
 
-            ObjectStore.Attach(reference);
+            ObjectStore.Entangle(reference);
             ObjectStore.Persist();
 
             ObjectStore = ObjectStore.Load(StorageEngine, false);
@@ -76,8 +76,8 @@ namespace Cleipnir.Tests
             p1.Other = p2;
             p2.Other = p1;
 
-            ObjectStore.Attach(p1);
-            ObjectStore.Attach(p2);
+            ObjectStore.Entangle(p1);
+            ObjectStore.Entangle(p2);
             ObjectStore.Persist();
 
             var loadedPerson = Load();

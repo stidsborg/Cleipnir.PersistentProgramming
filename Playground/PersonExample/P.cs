@@ -22,7 +22,7 @@ namespace Playground.PersonExample
                 Parent = parent
             };
             
-            os.Attach(child);
+            os.Entangle(child);
             os.Persist();
 
             os = ObjectStore.Load(storageEngine);

@@ -16,7 +16,7 @@ namespace Cleipnir.Tests.ObjectStoreTests
             var storageEngine = new StorageEngine();
             var os = ObjectStore.New(storageEngine);
             
-            os.Attach("hello world");
+            os.Entangle("hello world");
             storageEngine.InvokedCount.Value.ShouldBe(0);
             os.Persist();
             storageEngine.InvokedCount.Value.ShouldBe(1);

@@ -45,7 +45,7 @@ namespace Cleipnir.ExecutionEngine
             var scheduler = new InternalScheduler(objectStore, readyToSchedules, syncs, engineScheduler);
             engineScheduler.Scheduler = scheduler;
 
-            objectStore.Attach(readyToSchedules);
+            objectStore.Entangle(readyToSchedules);
 
             scheduler.Start();
 

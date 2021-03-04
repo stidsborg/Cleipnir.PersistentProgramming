@@ -28,7 +28,7 @@ namespace Playground.PoormansExecutionEngine
             {
                 _objectStore = ObjectStore.New(storageEngine);
                 _workQueue = new();
-                _objectStore.Attach(_workQueue);
+                _objectStore.Entangle(_workQueue);
             }
 
             Task.Run(ExecuteEventLoop);

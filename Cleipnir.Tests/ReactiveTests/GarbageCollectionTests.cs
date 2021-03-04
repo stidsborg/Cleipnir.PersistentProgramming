@@ -29,8 +29,8 @@ namespace Cleipnir.Tests.ReactiveTests
 
             var store = ObjectStore.New(storage);
 
-            store.Attach(source);
-            store.Attach(staticNonPersistable);
+            store.Entangle(source);
+            store.Entangle(staticNonPersistable);
             store.Persist();
 
             store = ObjectStore.Load(storage, true, new MockScheduler());
@@ -62,8 +62,8 @@ namespace Cleipnir.Tests.ReactiveTests
 
             var store = ObjectStore.New(storage);
 
-            store.Attach(source);
-            store.Attach(staticNonPersistable);
+            store.Entangle(source);
+            store.Entangle(staticNonPersistable);
             store.Persist();
 
             store = ObjectStore.Load(storage, true, new MockScheduler());
@@ -79,8 +79,8 @@ namespace Cleipnir.Tests.ReactiveTests
             staticNonPersistable.Value.ShouldBe(100);
             StaticAndNonStaticValue.StaticValue.ShouldBe(100);
 
-            store.Attach(source);
-            store.Attach(staticNonPersistable);
+            store.Entangle(source);
+            store.Entangle(staticNonPersistable);
             store.Persist();
 
             store = ObjectStore.Load(storage, true, new MockScheduler());
@@ -149,9 +149,9 @@ namespace Cleipnir.Tests.ReactiveTests
 
             var store = ObjectStore.New(storage);
 
-            store.Attach(source);
-            store.Attach(valueHolder);
-            store.Attach(subscriptionHolder);
+            store.Entangle(source);
+            store.Entangle(valueHolder);
+            store.Entangle(subscriptionHolder);
             store.Persist();
 
             store = ObjectStore.Load(storage, true, new MockScheduler());

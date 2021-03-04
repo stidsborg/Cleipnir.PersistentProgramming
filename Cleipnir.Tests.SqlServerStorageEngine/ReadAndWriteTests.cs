@@ -21,7 +21,7 @@ namespace Cleipnir.Tests.SqlServerStorageEngine
             var os = ObjectStore.New(testHelper.StorageEngineEngine);
 
             var p = new P();
-            os.Attach(p);
+            os.Entangle(p);
             p.SetValue("HELLO WORLD");
             os.Persist();
 

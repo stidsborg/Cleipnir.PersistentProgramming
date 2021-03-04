@@ -16,7 +16,7 @@ namespace Cleipnir.Tests.CircularDependencyDetectorTests
             a.Edges.Add(a);
             
             var os = ObjectStore.New(new InMemoryStorageEngine());
-            os.Attach(a);
+            os.Entangle(a);
             
             Should.Throw<CircularDependencyException>(() => 
                 os.Persist(true)
@@ -31,7 +31,7 @@ namespace Cleipnir.Tests.CircularDependencyDetectorTests
             a.Edges.Add(b);
             
             var os = ObjectStore.New(new InMemoryStorageEngine());
-            os.Attach(a);
+            os.Entangle(a);
             
             os.Persist(true);
         }
@@ -65,7 +65,7 @@ namespace Cleipnir.Tests.CircularDependencyDetectorTests
             e.Add(d);
             
             var os = ObjectStore.New(new InMemoryStorageEngine());
-            os.Attach(a);
+            os.Entangle(a);
             
             Should.Throw<CircularDependencyException>(() => 
                 os.Persist(true)
@@ -100,7 +100,7 @@ namespace Cleipnir.Tests.CircularDependencyDetectorTests
             e.Add(d);
             
             var os = ObjectStore.New(new InMemoryStorageEngine());
-            os.Attach(a);
+            os.Entangle(a);
             
             os.Persist(true);
         }

@@ -148,11 +148,11 @@ namespace Cleipnir.Tests.DataStructureTests
             return ObjectStore.Resolve<CQueue<int>>();
         }
 
-        private void Attach<T>(T t) => ObjectStore.Attach(t);
+        private void Attach<T>(T t) => ObjectStore.Entangle(t);
 
         private void AttachAndPersist<T>(T t)
         {
-            ObjectStore.Attach(t);
+            ObjectStore.Entangle(t);
             ObjectStore.Persist();
         }
 

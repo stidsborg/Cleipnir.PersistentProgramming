@@ -21,7 +21,7 @@ namespace Cleipnir.Tests.SqlServerStorageEngine
             var parent = new Person("Dad") {Child = child};
 
             var os = testHelper.NewObjectStore();
-            os.Attach(parent);
+            os.Entangle(parent);
             os.Persist();
 
             using var conn = testHelper.CreateConnection();

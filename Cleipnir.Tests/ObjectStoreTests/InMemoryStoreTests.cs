@@ -22,7 +22,7 @@ namespace Cleipnir.Tests.ObjectStoreTests
             var parent = new Person() {Name = "Oldy", Parent = null};
             var child = new Person() {Name = "Childy", Parent = parent};
             
-            os.Attach(child);
+            os.Entangle(child);
             os.Persist();
 
             os = ObjectStore.Load(storageEngine);

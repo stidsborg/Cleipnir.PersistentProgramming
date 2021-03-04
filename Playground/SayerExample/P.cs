@@ -14,8 +14,8 @@ namespace Playground.SayerExample
             sayer.Greeting = "Hello";
             Action greet = sayer.Greet;
             
-            os.Attach(sayer);
-            os.Attach(greet);
+            os.Entangle(sayer);
+            os.Entangle(greet);
             
             os.Persist();
 

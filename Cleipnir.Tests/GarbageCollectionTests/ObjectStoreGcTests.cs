@@ -28,7 +28,7 @@ namespace Cleipnir.Tests.GarbageCollectionTests
             var p2 = new Person { Name = "Hans" };
             p1.Other = p2;
 
-            objectStore.Attach(p1);
+            objectStore.Entangle(p1);
             objectStore.Persist();
 
             var p2ObjectId = FindPersonObjectId("Hans");
@@ -51,7 +51,7 @@ namespace Cleipnir.Tests.GarbageCollectionTests
             var p2 = new Person { Name = "P2", Other =  p3};
             var p1 = new Person { Name = "P1", Other =  p2};
           
-            objectStore.Attach(p1);
+            objectStore.Entangle(p1);
             objectStore.Persist();
 
             var p2ObjectId = FindPersonObjectId("P2");
@@ -77,7 +77,7 @@ namespace Cleipnir.Tests.GarbageCollectionTests
             var p2 = new Person { Name = "P2", Other = p3 };
             var p1 = new Person { Name = "P1", Other = p2 };
 
-            objectStore.Attach(p1);
+            objectStore.Entangle(p1);
             objectStore.Persist();
 
             var p2ObjectId = FindPersonObjectId("P2");
