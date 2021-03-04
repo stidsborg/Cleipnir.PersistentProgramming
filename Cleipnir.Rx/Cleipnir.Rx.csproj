@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Cleipnir.ObjectDB\Cleipnir.ObjectDB.csproj" />
+    <ProjectReference Include="..\Cleipnir.ObjectDB\Cleipnir.ObjectDB.csproj" />
   </ItemGroup>
 
 </Project>

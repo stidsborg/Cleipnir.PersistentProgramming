@@ -14,7 +14,7 @@
     <ProjectReference Include="..\Cleipnir.ExecutionEngine.Providers\Cleipnir.ExecutionEngine.Providers.csproj" />
     <ProjectReference Include="..\Cleipnir.ObjectDB\Cleipnir.ObjectDB.csproj" />
     <ProjectReference Include="..\Cleipnir.Rx.ExecutionEngine\Cleipnir.Rx.ExecutionEngine.csproj" />
-    <ProjectReference Include="..\Cleipnir.Rx\Cleipnir.Rx\Cleipnir.Rx.csproj" />
+    <ProjectReference Include="..\Cleipnir.Rx\Cleipnir.Rx.csproj" />
     <ProjectReference Include="..\Cleipnir.StorageEngine.InMemory\Cleipnir.StorageEngine.InMemory.csproj" />
     <ProjectReference Include="..\Cleipnir.StorageEngine.SimpleFile\Cleipnir.StorageEngine.SimpleFile.csproj" />
     <ProjectReference Include="..\Cleipnir.StorageEngine.SqlServer\Cleipnir.StorageEngine.SqlServer.csproj" />
