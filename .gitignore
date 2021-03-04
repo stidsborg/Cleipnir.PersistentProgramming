@@ -381,12 +381,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/.idea/.idea.PStm/.idea/.name
-/.idea/.idea.PStm/.idea/codeStyles/codeStyleConfig.xml
-/.idea/.idea.PStm/.idea/indexLayout.xml
-/.idea/.idea.PStm/.idea/projectSettingsUpdater.xml
-/.idea/.idea.PStm/.idea/vcs.xml
-/.idea/.idea.Cleipnir/.idea/codeStyles/codeStyleConfig.xml
-/.idea/.idea.Cleipnir/.idea/indexLayout.xml
-/.idea/.idea.Cleipnir/.idea/projectSettingsUpdater.xml
-/.idea/.idea.Cleipnir/.idea/vcs.xml
+/.idea/
