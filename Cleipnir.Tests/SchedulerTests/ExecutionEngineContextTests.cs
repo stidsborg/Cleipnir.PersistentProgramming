@@ -14,7 +14,7 @@ namespace Cleipnir.Tests.SchedulerTests
         {
             var objectStore = ObjectStore.New(new InMemoryStorageEngine());
             var syncs = new SynchronizationQueue();
-            var scheduler = new InternalScheduler(objectStore, new ReadyToSchedules(), syncs, new Engine());
+            var scheduler = new InternalScheduler(objectStore, new ReadyToSchedules(), syncs, new Engine(), false);
 
             scheduler.Start();
 

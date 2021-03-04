@@ -27,12 +27,16 @@ namespace Cleipnir.ExecutionEngine
 
         private readonly SynchronizationQueue _synchronizationQueue;
         private readonly Engine _engine;
+        
+        private readonly bool _detectCircularDependencies;
+        private Exception _excepted = null;
 
         internal InternalScheduler(
             ObjectStore objectStore,
             ReadyToSchedules readyToSchedules,
             SynchronizationQueue synchronizationQueue, 
-            Engine engine)
+            Engine engine,
+            bool detectCircularDependencies)
         {
             _objectStore = objectStore;
 
@@ -40,6 +44,7 @@ namespace Cleipnir.ExecutionEngine
             
             _synchronizationQueue = synchronizationQueue;
             _engine = engine;
+            _detectCircularDependencies = detectCircularDependencies;
         }
 
         public void Start()
@@ -78,7 +83,13 @@ namespace Cleipnir.ExecutionEngine
         public void Schedule(Action toExecute, bool persistent)
         {
             lock (_sync)
+            {
+                if (_excepted != null)
+                    throw _excepted;
+                
                 _readyToSchedules.Enqueue(toExecute, persistent);
+            }
+                
         }
 
         public void FireAndForget(Action toExecute)
@@ -86,31 +97,46 @@ namespace Cleipnir.ExecutionEngine
 
         private void Execute()
         {
-            SetAmbientContext();
-
-            var toExecutes = new CArray<CAction>();
-            
-            while (_running)
+            try
             {
-                lock (_sync)
-                    _readyToSchedules.MoveAllTo(toExecutes);
+                SetAmbientContext();
 
-                if (toExecutes.Count == 0)
+                var toExecutes = new CArray<CAction>();
+
+                while (_running)
                 {
                     lock (_sync)
-                    {
-                        _synchronizationQueue.MoveAllTo(_readyToSchedules);
+                        _readyToSchedules.MoveAllTo(toExecutes);
 
-                        _objectStore.Persist();
+                    if (toExecutes.Count == 0)
+                    {
+                        lock (_sync)
+                        {
+                            _synchronizationQueue.MoveAllTo(_readyToSchedules);
+
+                            _objectStore.Persist(_detectCircularDependencies);
+                        }
+                    }
+                    else
+                    {
+                        foreach (var toExecute in toExecutes)
+                            try
+                            {
+                                toExecute.Action();
+                            }
+                            catch
+                            {
+                                //todo let the world around know about the fact that a work item threw an exception
+                            }
+
+                        toExecutes.Clear();
                     }
                 }
-                else
-                {
-                    foreach (var toExecute in toExecutes)
-                        try { toExecute.Action(); } catch { }
-                    
-                    toExecutes.Clear();
-                }
+            }
+            catch (Exception e)
+            {
+                lock (_sync)
+                    _excepted = e;
             }
         }
 

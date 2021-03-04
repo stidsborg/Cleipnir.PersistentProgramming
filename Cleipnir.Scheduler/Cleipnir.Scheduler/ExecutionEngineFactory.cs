@@ -7,6 +7,9 @@ namespace Cleipnir.ExecutionEngine
     public static class ExecutionEngineFactory
     {
         public static Engine Continue(IStorageEngine storageEngine, params object[] ephemeralInstances)
+            => Continue(storageEngine, false, ephemeralInstances);
+
+        public static Engine Continue(IStorageEngine storageEngine, bool detectCircularDependencies, params object[] ephemeralInstances)
         {
             var syncs = new SynchronizationQueue();
 
@@ -18,12 +21,12 @@ namespace Cleipnir.ExecutionEngine
 
             var frameworkEphemeralInstances = new object[] { proxyScheduler, engineScheduler };
 
-            var concatList = ephemeralInstances.Concat(frameworkEphemeralInstances).ToArray();
-            var store = ObjectStore.Load(storageEngine, concatList);
+            var userAndFrameworkEphemeralInstances = ephemeralInstances.Concat(frameworkEphemeralInstances).ToArray();
+            var store = ObjectStore.Load(storageEngine, userAndFrameworkEphemeralInstances);
 
             var readyToSchedules = store.Resolve<ReadyToSchedules>();
 
-            var scheduler = new InternalScheduler(store, readyToSchedules, syncs, engineScheduler);
+            var scheduler = new InternalScheduler(store, readyToSchedules, syncs, engineScheduler, detectCircularDependencies);
             engineScheduler.Scheduler = scheduler;
 
             proxyScheduler.Scheduler = scheduler;
@@ -34,6 +37,9 @@ namespace Cleipnir.ExecutionEngine
         }
 
         public static Engine StartNew(IStorageEngine storageEngine)
+            => StartNew(storageEngine, false);
+        
+        public static Engine StartNew(IStorageEngine storageEngine, bool detectCircularDependencies)
         {
             var syncs = new SynchronizationQueue();
 
@@ -42,7 +48,7 @@ namespace Cleipnir.ExecutionEngine
             var readyToSchedules = new ReadyToSchedules();
             
             var engineScheduler = new Engine();
-            var scheduler = new InternalScheduler(objectStore, readyToSchedules, syncs, engineScheduler);
+            var scheduler = new InternalScheduler(objectStore, readyToSchedules, syncs, engineScheduler, detectCircularDependencies);
             engineScheduler.Scheduler = scheduler;
 
             objectStore.Entangle(readyToSchedules);

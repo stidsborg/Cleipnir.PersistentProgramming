@@ -1,4 +1,4 @@
-using Cleipnir.ObjectDB;
+using Cleipnir.ExecutionEngine;
 using Cleipnir.ObjectDB.Persistency;
 using Cleipnir.StorageEngine.InMemory;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -7,20 +7,18 @@ using Shouldly;
 namespace Cleipnir.Tests.CircularDependencyDetectorTests
 {
     [TestClass]
-    public class CircularityDetectionIntegrationTests
+    public class CircularityDetectionExecutionEngineTests
     {
         [TestMethod]
         public void DetectSelfCircularDependency()
         {
             var a = new Node { Name = "A" };
             a.Edges.Add(a);
-            
-            var os = ObjectStore.New(new InMemoryStorageEngine());
-            os.Entangle(a);
-            
-            Should.Throw<CircularDependencyException>(() => 
-                os.Persist(true)
-            );
+
+            var engine = ExecutionEngineFactory.StartNew(new InMemoryStorageEngine(), detectCircularDependencies: true);
+            engine.Entangle(a).Wait();
+
+            Should.Throw<CircularDependencyException>(engine.Sync);
         }
         
         [TestMethod]
@@ -30,10 +28,10 @@ namespace Cleipnir.Tests.CircularDependencyDetectorTests
             var b = new Node { Name = "B" };
             a.Edges.Add(b);
             
-            var os = ObjectStore.New(new InMemoryStorageEngine());
-            os.Entangle(a);
-            
-            os.Persist(true);
+            var engine = ExecutionEngineFactory.StartNew(new InMemoryStorageEngine(), detectCircularDependencies: true);
+            engine.Entangle(a).Wait();
+
+            engine.Sync().Wait();
         }
 
         [TestMethod]
@@ -64,12 +62,10 @@ namespace Cleipnir.Tests.CircularDependencyDetectorTests
             f.Add(e);
             e.Add(d);
             
-            var os = ObjectStore.New(new InMemoryStorageEngine());
-            os.Entangle(a);
-            
-            Should.Throw<CircularDependencyException>(() => 
-                os.Persist(true)
-            );
+            var engine = ExecutionEngineFactory.StartNew(new InMemoryStorageEngine(), detectCircularDependencies: true);
+            engine.Entangle(a).Wait();
+
+            Should.Throw<CircularDependencyException>(engine.Sync);
         }
         
         [TestMethod]
@@ -99,10 +95,10 @@ namespace Cleipnir.Tests.CircularDependencyDetectorTests
             f.Add(e);
             e.Add(d);
             
-            var os = ObjectStore.New(new InMemoryStorageEngine());
-            os.Entangle(a);
-            
-            os.Persist(true);
+            var engine = ExecutionEngineFactory.StartNew(new InMemoryStorageEngine(), detectCircularDependencies: true);
+            engine.Entangle(a).Wait();
+
+            engine.Sync().Wait();
         }
     }
 }
