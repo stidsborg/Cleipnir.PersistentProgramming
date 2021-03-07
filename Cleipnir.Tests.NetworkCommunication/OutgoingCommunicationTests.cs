@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -190,7 +189,7 @@ namespace Cleipnir.Tests.NetworkCommunication
                         }
                     }
                 }
-            } catch (Exception _) {}
+            } catch (Exception) {}
         }
 
         public void DisposeConnectedSocket()
