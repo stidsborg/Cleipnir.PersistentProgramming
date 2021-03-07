@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cleipnir.ExecutionEngine;
-using Cleipnir.ExecutionEngine.Api;
 using Cleipnir.ObjectDB.Persistency;
 using Cleipnir.ObjectDB.Persistency.Deserialization;
 using Cleipnir.ObjectDB.Persistency.Serialization;
@@ -11,6 +10,7 @@ using Cleipnir.Persistency.Persistency;
 using Cleipnir.StorageEngine.InMemory;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
+using Roots = Cleipnir.ExecutionEngine.Api.Roots;
 
 namespace Cleipnir.Tests
 {

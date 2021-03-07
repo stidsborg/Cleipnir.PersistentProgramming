@@ -5,7 +5,7 @@ namespace Cleipnir.ExecutionEngine.Api
 {
     public static class Roots
     {
-        internal static ThreadLocal<RootsInstance> Instance { get; } = new ThreadLocal<RootsInstance>();
+        internal static ThreadLocal<IRoots> Instance { get; } = new ThreadLocal<IRoots>();
         public static void Entangle(object persistable) => Instance.Value.Entangle(persistable);
         public static void Untangle(object persistable) => Instance.Value.Untangle(persistable);
 

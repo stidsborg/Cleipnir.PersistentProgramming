@@ -10,7 +10,7 @@ namespace Cleipnir.ObjectDB.Persistency.Serialization
     internal class Persister
     {
         private readonly IStorageEngine _storageEngine;
-        private readonly RootsInstance _roots;
+        private readonly Roots _roots;
         private readonly StateMaps _stateMaps;
         private readonly Serializers.Serializers _serializers;
         
@@ -18,7 +18,7 @@ namespace Cleipnir.ObjectDB.Persistency.Serialization
 
         public Persister(
             IStorageEngine storageEngine,
-            RootsInstance roots,
+            Roots roots,
             Serializers.Serializers serializers, 
             StateMaps stateMaps)
         {

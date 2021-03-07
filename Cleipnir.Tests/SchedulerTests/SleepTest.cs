@@ -10,6 +10,7 @@ using Cleipnir.ObjectDB.TaskAndAwaitable.StateMachine;
 using Cleipnir.StorageEngine.InMemory;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
+using Roots = Cleipnir.ExecutionEngine.Api.Roots;
 
 namespace Cleipnir.Tests.SchedulerTests
 {

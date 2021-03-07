@@ -20,7 +20,7 @@ namespace Cleipnir.Tests.CircularDependencyDetectorTests
             a.Edges.Add(b);
             b.Edges.Add(a);
 
-            var roots = new RootsInstance();
+            var roots = new Roots();
             roots.Entangle(a);
 
             var serializers = new Serializers(new SerializerFactory());
@@ -42,7 +42,7 @@ namespace Cleipnir.Tests.CircularDependencyDetectorTests
 
             a.Edges.Add(a);
 
-            var roots = new RootsInstance();
+            var roots = new Roots();
             roots.Entangle(a);
 
             var serializers = new Serializers(new SerializerFactory());
@@ -70,7 +70,7 @@ namespace Cleipnir.Tests.CircularDependencyDetectorTests
             b.Edges.Add(c);
             c.Edges.Add(b);
             
-            var roots = new RootsInstance();
+            var roots = new Roots();
             roots.Entangle(a);
 
             var serializers = new Serializers(new SerializerFactory());
@@ -112,7 +112,7 @@ namespace Cleipnir.Tests.CircularDependencyDetectorTests
             f.Add(e);
             e.Add(d);
             
-            var roots = new RootsInstance();
+            var roots = new Roots();
             roots.Entangle(a);
 
             var serializers = new Serializers(new SerializerFactory());
@@ -153,7 +153,7 @@ namespace Cleipnir.Tests.CircularDependencyDetectorTests
             f.Add(e);
             e.Add(d);
             
-            var roots = new RootsInstance();
+            var roots = new Roots();
             roots.Entangle(a);
 
             var serializers = new Serializers(new SerializerFactory());

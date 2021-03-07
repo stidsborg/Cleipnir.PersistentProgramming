@@ -74,7 +74,7 @@ namespace Cleipnir.ObjectDB.Persistency.Deserialization
                 return serializer;
             }
 
-            var roots = (RootsInstance) Deserialize(0).Instance;
+            var roots = (Roots) Deserialize(0).Instance;
             ephemeralInstances.Add(roots);
 
             while (toDeserialize.Any())
@@ -87,6 +87,6 @@ namespace Cleipnir.ObjectDB.Persistency.Deserialization
             return new State(roots, stateMaps, serializers);
         }
 
-        public record State(RootsInstance Roots, StateMaps StateMaps, Serializers Serializers) { }
+        public record State(Roots Roots, StateMaps StateMaps, Serializers Serializers) { }
     }
 }

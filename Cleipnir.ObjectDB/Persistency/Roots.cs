@@ -7,12 +7,12 @@ using Cleipnir.Persistency.Persistency;
 
 namespace Cleipnir.ObjectDB.Persistency
 {
-    public class RootsInstance : IPersistable
+    internal class Roots : IRoots, IPersistable
     {
         private CSet<object> _roots = new CSet<object>();
         private CSet<object> _anonymousRoots = new CSet<object>();
         private bool _serialized;
-        public IEnumerable<object> Instances => _roots;
+        public IEnumerable<object> All() => _roots;
 
         public void Entangle(object persistable) => _roots.Add(persistable);
         public void Untangle(object persistable) => _roots.Remove(persistable);
@@ -21,6 +21,7 @@ namespace Cleipnir.ObjectDB.Persistency
         public void UntangleAnonymously(object instance) => _anonymousRoots.Remove(instance);
 
         public T Resolve<T>() => (T) _roots.Single(i => i is T);
+
         public IEnumerable<T> ResolveAll<T>() => _roots.Where(i => i is T).Cast<T>().ToList(); 
         public void Serialize(StateMap sd, SerializationHelper helper)
         {
@@ -31,9 +32,9 @@ namespace Cleipnir.ObjectDB.Persistency
             sd.Set(nameof(_anonymousRoots), helper.GetReference(_anonymousRoots));
         }
         
-        private static RootsInstance Deserialize(IReadOnlyDictionary<string, object> sd)
+        private static Roots Deserialize(IReadOnlyDictionary<string, object> sd)
         {
-            var roots = new RootsInstance {_serialized = true};
+            var roots = new Roots {_serialized = true};
             
             var reference = (Reference) sd[nameof(_roots)];
             reference.DoWhenResolved<CSet<object>>(set => roots._roots = set);

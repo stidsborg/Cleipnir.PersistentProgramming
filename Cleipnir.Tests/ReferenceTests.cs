@@ -119,7 +119,7 @@ namespace Cleipnir.Tests
         private Person Load()
         {
             ObjectStore = ObjectStore.Load(StorageEngine, false);
-            return ObjectStore.ResolveAll<Person>().Single(p => p.Name == "Ole");
+            return ObjectStore.Roots.All().OfType<Person>().Single(p => p.Name == "Ole");
         }
 
         private void Persist() => ObjectStore.Persist();

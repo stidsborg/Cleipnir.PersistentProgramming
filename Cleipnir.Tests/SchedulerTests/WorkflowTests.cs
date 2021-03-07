@@ -12,6 +12,7 @@ using Cleipnir.StorageEngine.InMemory;
 using Cleipnir.Tests.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
+using Roots = Cleipnir.ExecutionEngine.Api.Roots;
 
 namespace Cleipnir.Tests.SchedulerTests
 {
