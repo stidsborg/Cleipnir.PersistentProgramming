@@ -1,8 +1,6 @@
-# Cleipnir = Persistent Programming in .NET = Sagas Simplified 
+# Cleipnir Persistent Programming in .NET
 
 Cleipnir is a .NET (still experimental) framework allowing persistent programming on the .NET platform.
-
-![alt text](http://cleipnir.net/logo.png "Our logo") 
 
 ## Background
 As part of my (now failed) PhD I investigated how persistent programming could simplify the implementation of distributed systems and in particular consensus algorithms such as Paxos and Raft. I think there is a potential for persistent programming that has still not been reached in industry. Especially, for the Saga microservice pattern. Hang in there and see if you agree :)
