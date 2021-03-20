@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cleipnir.ExecutionEngine", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cleipnir.Rx", "Cleipnir.Rx\Cleipnir.Rx.csproj", "{EB231DC1-646C-4686-A614-410AD4214230}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cleipnir.Tests.ObjectStore", "Cleipnir.Tests.ObjectStore\Cleipnir.Tests.ObjectStore.csproj", "{272F22B4-8C87-4A38-BAEB-82B70329B52C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,6 +113,10 @@ Global
 		{EB231DC1-646C-4686-A614-410AD4214230}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB231DC1-646C-4686-A614-410AD4214230}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB231DC1-646C-4686-A614-410AD4214230}.Release|Any CPU.Build.0 = Release|Any CPU
+		{272F22B4-8C87-4A38-BAEB-82B70329B52C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{272F22B4-8C87-4A38-BAEB-82B70329B52C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{272F22B4-8C87-4A38-BAEB-82B70329B52C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{272F22B4-8C87-4A38-BAEB-82B70329B52C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

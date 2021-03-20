@@ -1,18 +1,19 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
+using Cleipnir.StorageEngine;
 
 namespace Cleipnir.ObjectDB.Persistency.Version2
 {
     public class MapAndSerializers
     {
-        private readonly Dictionary<long, ISerializer2> _serializers = new();
-        private readonly Dictionary<long, Map2> _maps = new();
+        private readonly Dictionary<long, MapAndSerializer> _mapAndSerializers = new();
 
         private readonly Dictionary<object, long> _objectToId = new(new ObjectReferenceEqualityComparer<object>());
 
         private readonly SerializerFactories _factories;
+
+        private List<ObjectIdAndType> _newEntries = new();
 
         private long _nextObjectId = 0;
         
@@ -20,9 +21,9 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
 
         public bool IsSerializable(object o) => _factories.IsSerializable(o);
 
-        public ISerializer2 this[long id] => _serializers[id];
-        
-        public ISerializer2 GetOrCreateSerializerFor(object instance)
+        public MapAndSerializer this[long id] => _mapAndSerializers[id];
+
+        public SerializerAndObjectId GetOrCreateSerializerFor(object instance)
         {
             if (instance == null)
                 throw new ArgumentNullException(nameof(instance));
@@ -31,8 +32,8 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
                 _objectToId[instance] = _nextObjectId++;
                 
             var objectId = _objectToId[instance];
-            if (_serializers.ContainsKey(objectId))
-                return _serializers[objectId];
+            if (_mapAndSerializers.ContainsKey(objectId))
+                return new SerializerAndObjectId(_mapAndSerializers[objectId].Serializer, objectId);
 
             var factory = _factories.Find(instance);
 
@@ -40,18 +41,25 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
                 throw new ArgumentException($"Serialization of {instance.GetType()} not supported. Did you forget to add custom serializer?");
 
             var serializer = factory.CreateSerializer(instance);
-            _serializers[objectId] = serializer;
-            _maps[objectId] = new Map2(this);
-            
-            return serializer;
+            _mapAndSerializers[objectId] = new MapAndSerializer(new Map2(this), serializer);
+            _newEntries.Add(new ObjectIdAndType(objectId, factory.GetType()));
+
+            return new SerializerAndObjectId(serializer, objectId);
         }
         
-        public void Add(long objectId, ISerializer2 serializer, Map2 m)
+        public void Add(long objectId, ISerializer2 serializer, Map2 map)
         {
+            //todo test if object id already exist?
             _objectToId[serializer.Instance] = objectId;
-            _serializers[objectId] = serializer;
-            _maps[objectId] = m;
+            _mapAndSerializers[objectId] = new MapAndSerializer(map, serializer);
             _nextObjectId = Math.Max(_nextObjectId, objectId + 1);
+        }
+
+        public IEnumerable<ObjectIdAndType> PullNewSerializerFactoryTypes()
+        {
+            var newEntries = _newEntries;
+            _newEntries = new List<ObjectIdAndType>();
+            return newEntries;
         }
 
         private class ObjectReferenceEqualityComparer<T> : EqualityComparer<T> where T : class
@@ -61,4 +69,8 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
             public override int GetHashCode(T obj) => RuntimeHelpers.GetHashCode(obj);
         }
     }
+
+    public record MapAndSerializer(Map2 Map, ISerializer2 Serializer);
+
+    public record SerializerAndObjectId(ISerializer2 Serializer, long ObjectId);
 }

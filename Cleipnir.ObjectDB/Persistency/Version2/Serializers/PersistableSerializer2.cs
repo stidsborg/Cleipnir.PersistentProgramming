@@ -34,7 +34,7 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
         {
             var type = Type.GetType(rm.Get<string>("¡Type"));
             var persistable = (IPersistable2) InvokeStaticDeserializeMethod(type, rm, eps);
-            return new PersistableSerializer2(persistable);
+            return new PersistableSerializer2(persistable) { _serialized = true };
         }
         
         private static object InvokeStaticDeserializeMethod(Type type, RMap rm, Ephemerals eps)

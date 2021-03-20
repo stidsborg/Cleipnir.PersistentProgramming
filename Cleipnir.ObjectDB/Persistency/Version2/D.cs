@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Cleipnir.ObjectDB.Helpers.DataStructures;
-using Cleipnir.ObjectDB.Persistency.Deserialization;
 using Cleipnir.StorageEngine;
 
 namespace Cleipnir.ObjectDB.Persistency.Version2
@@ -29,19 +28,17 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
             _serializerFactories = serializerFactories;
         }
         
-        public static Deserializer.State Load(IStorageEngine storageEngine, Ephemerals ephemerals, SerializerFactories serializerFactories)
+        public static DeserializedState Load(IStorageEngine storageEngine, Ephemerals ephemerals, SerializerFactories serializerFactories)
         {
             var storedState = storageEngine.Load();
 
             var d = new D(storedState, ephemerals, serializerFactories);
-            d.Deserialize();
-
-            return null;
+            return d.Deserialize();
         }
 
-        public object Deserialize()
+        public DeserializedState Deserialize()
         {
-            var root = Deserialize(Roots.ObjectId).Instance;
+            var roots = (Roots2) Deserialize(Roots2.ObjectId).Instance;
             while (_serializationQueue.Count > 0)
                 _ = Deserialize(_serializationQueue.Dequeue());
             
@@ -63,7 +60,7 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
                 );
             }
             
-            return root;
+            return new DeserializedState(roots, mapAndSerializers);
         } 
         public ISerializer2 Deserialize(long objectId)
         {
@@ -90,4 +87,9 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
             _serializationQueue.Enqueue(objectId);
         }
     }
+
+    internal record DeserializedState(
+        Roots2 Roots,
+        MapAndSerializers MapAndSerializers
+    );
 }

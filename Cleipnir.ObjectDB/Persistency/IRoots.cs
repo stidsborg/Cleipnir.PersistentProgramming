@@ -4,7 +4,7 @@ namespace Cleipnir.ObjectDB.Persistency
 {
     public interface IRoots
     {
-        void Entangle(object o);
+        void Entangle(object persistable);
         void Untangle(object o);
 
         void EntangleAnonymously(object o);

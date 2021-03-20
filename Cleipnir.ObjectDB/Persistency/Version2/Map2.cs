@@ -11,7 +11,7 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
         private readonly Dictionary<string, Entry> _entries = new();
 
         private Dictionary<string, SerializerOrValue> _changedEntries = new();
-        private readonly Dictionary<string, ISerializer2> _serializables = new();
+        private readonly Dictionary<string, SerializerAndObjectId> _serializables = new();
         private readonly HashSet<string> _removedKeys = new();
 
         public Map2(MapAndSerializers mapAndSerializers) => _mapAndSerializers = mapAndSerializers;
@@ -24,8 +24,8 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
             {
                 if (existingEntry.HoldsSerializer)
                 {
-                    _serializables[existingEntry.Key] = existingEntry.Serializer;
-                    _entries[existingEntry.Key] = new Entry(existingEntry.Serializer.Instance);
+                    _serializables[existingEntry.Key] = existingEntry.SerializerAndObjectId;
+                    _entries[existingEntry.Key] = new Entry(existingEntry.SerializerAndObjectId.Serializer.Instance);
                 } else 
                     _entries[existingEntry.Key] = new Entry(existingEntry.Value);
             }
@@ -55,7 +55,7 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
             return toReturn;
         }
 
-        internal IEnumerable<ISerializer2> GetReferencedSerializers() => _serializables.Values;
+        internal IEnumerable<SerializerAndObjectId> GetReferencedSerializers() => _serializables.Values;
         
         public void Set(string key, object value)
         {
@@ -123,25 +123,30 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
     {
         public string Key { get; }
 
-        public bool HoldsSerializer => Serializer != null;
-        public ISerializer2 Serializer { get; }
+        public bool HoldsSerializer => SerializerAndObjectId != null;
+        public SerializerAndObjectId SerializerAndObjectId { get; }
         public object Value { get; }
 
-        private SerializerOrValue(string key, ISerializer2 serializer)
+        private SerializerOrValue(string key, SerializerAndObjectId serializer)
         {
             Key = key;
-            Serializer = serializer;
+            SerializerAndObjectId = serializer;
             Value = null;
         }
 
         private SerializerOrValue(string key, object value)
         {
             Key = key;
-            Serializer = null;
+            SerializerAndObjectId = null;
             Value = value;
         }
 
         public static SerializerOrValue CreateValue(string key, object value) => new SerializerOrValue(key, value);
-        public static SerializerOrValue CreateSerializer(string key, ISerializer2 serializer) => new SerializerOrValue(key, serializer);
+
+        public static SerializerOrValue CreateSerializer(string key, ISerializer2 serializer, long objectId)
+            => CreateSerializer(key, new SerializerAndObjectId(serializer, objectId));
+        
+        public static SerializerOrValue CreateSerializer(string key, SerializerAndObjectId serializerAndObjectId) 
+            => new SerializerOrValue(key, serializerAndObjectId);
     }
 }

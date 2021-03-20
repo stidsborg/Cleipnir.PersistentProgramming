@@ -9,6 +9,7 @@ namespace Cleipnir.ObjectDB.Persistency
 {
     internal class Roots : IRoots, IPersistable
     {
+        public const long ObjectId = 0;
         private CSet<object> _roots = new CSet<object>();
         private CSet<object> _anonymousRoots = new CSet<object>();
         private bool _serialized;

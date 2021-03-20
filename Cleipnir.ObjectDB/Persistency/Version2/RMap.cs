@@ -32,11 +32,14 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
             }
             else
             {
-                var serializer = _deserializer.Deserialize(entry.Reference.Value);
-                _resolvedValues[name] = SerializerOrValue.CreateSerializer(name, serializer);
+                var objectId = entry.Reference.Value;
+                var serializer = _deserializer.Deserialize(objectId);
+                _resolvedValues[name] = SerializerOrValue.CreateSerializer(name, serializer, objectId);
                 return (T) serializer.Instance;
             }
         }
+
+        public bool ContainsKey(string name) => _storageEntries.ContainsKey(name);
 
         public void WhenResolved<T>(string name, Action<T> setter)
         {
@@ -55,9 +58,10 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
             else
             {
                 //todo better handle casting exceptions while deserializing
-                _deserializer.RegisterCallbackWhenResolved(entry.Reference.Value, s =>
+                var objectId = entry.Reference.Value;
+                _deserializer.RegisterCallbackWhenResolved(objectId, s =>
                 {
-                    _resolvedValues[name] = SerializerOrValue.CreateSerializer(name, s);
+                    _resolvedValues[name] = SerializerOrValue.CreateSerializer(name, s, objectId);
                     setter((T) s.Instance);
                 });
             }
