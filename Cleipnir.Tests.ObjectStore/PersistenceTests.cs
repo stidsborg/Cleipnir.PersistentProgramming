@@ -1,5 +1,6 @@
-using System;
 using Cleipnir.ObjectDB.Persistency.Version2;
+using Cleipnir.ObjectDB.Persistency.Version2.Serializers;
+using Cleipnir.ObjectDB.Persistency.Version2.Serializers.Persistable;
 using Cleipnir.StorageEngine.InMemory;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
@@ -14,7 +15,7 @@ namespace Cleipnir.Tests.ObjectStore
         {
             var storageEngine = new InMemoryStorageEngine();
             var roots = new Roots2();
-            var serializerFactories = new SerializerFactories(new[] {new PersistableSerializer2()});
+            var serializerFactories = SerializerFactories.Default;
             var mps = new MapAndSerializers(serializerFactories);
 
             mps.GetOrCreateSerializerFor(roots);
@@ -24,12 +25,9 @@ namespace Cleipnir.Tests.ObjectStore
             var persister = new Persister2(storageEngine, mps);
             persister.DetectAndPersistChanges();
 
-            var storedState = storageEngine.Load();
+            var deserializedState = D.Load(storageEngine, new Ephemerals(), serializerFactories);
 
-            var d = new D(storedState, new Ephemerals(), serializerFactories);
-            var deserializedState = d.Deserialize();
-
-            var deserializedPerson = deserializedState.Roots.Resolve<Person>();
+            var deserializedPerson = deserializedState.Roots.Find<Person>();
             
             deserializedPerson.Name.ShouldBe("Peter");
             deserializedPerson.Other.ShouldBeNull();

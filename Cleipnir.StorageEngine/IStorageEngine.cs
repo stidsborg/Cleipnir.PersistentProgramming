@@ -11,5 +11,6 @@ namespace Cleipnir.StorageEngine
 
     public record StoredState(
         IReadOnlyDictionary<long, Type> Serializers,
-        IReadOnlyDictionary<long, IEnumerable<StorageEntry>> StorageEntries) { }
+        IReadOnlyDictionary<long, IEnumerable<StorageEntry>> StorageEntries
+    );
 }

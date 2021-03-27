@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace Cleipnir.ObjectDB.Persistency.Version2
 {
-    public class ListSet : IEnumerable<object>
+    public class RootSet : IEnumerable<object>
     {
         private readonly List<object> _entries;
 
-        public ListSet(int capacity = 0) => _entries = new List<object>(capacity); 
+        public RootSet(int capacity = 0) => _entries = new List<object>(capacity); 
         
         public void Add(object root)
         {
@@ -35,9 +35,9 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
             m[$"{keyPrefix}Count"] = _entries.Count;
         }
 
-        public static ListSet DeserializeFrom(RMap rm, string keyPrefix = "")
+        public static RootSet DeserializeFrom(RMap rm, string keyPrefix = "")
         {
-            var listSet = new ListSet();
+            var listSet = new RootSet();
             if (!rm.ContainsKey($"{keyPrefix}Count")) return listSet;
             var elms = new object[rm.Get<int>($"{keyPrefix}Count")];
 

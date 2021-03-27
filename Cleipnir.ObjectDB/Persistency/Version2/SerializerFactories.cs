@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cleipnir.ObjectDB.Persistency.Version2.Serializers.Delegate;
+using Cleipnir.ObjectDB.Persistency.Version2.Serializers.Persistable;
 
 namespace Cleipnir.ObjectDB.Persistency.Version2
 {
@@ -8,9 +10,9 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
     {
         private readonly IReadOnlyList<ISerializerFactory> _factories;
 
-        public SerializerFactories(IReadOnlyList<ISerializerFactory> factories)
+        public SerializerFactories(IEnumerable<ISerializerFactory> factories)
         {
-            _factories = factories;
+            _factories = factories.ToList();
         }
 
         public ISerializerFactory Find(object o) => 
@@ -19,6 +21,11 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
         public bool IsSerializable(object o) => _factories.Any(f => f.CanSerialize(o));
 
         public ISerializerFactory Find(Type type)
-            => _factories.FirstOrDefault(f => f.GetType() == type);
+            => _factories.First(f => f.GetType() == type);
+
+        internal static IEnumerable<ISerializerFactory> DefaultFactories { get; } =
+            new ISerializerFactory[] {new DelegateSerializerFactory(), new PersistableSerializerFactory()};
+        
+        internal static SerializerFactories Default { get; } = new SerializerFactories(DefaultFactories);
     }
 }

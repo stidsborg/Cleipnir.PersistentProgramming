@@ -94,16 +94,16 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
                         c.HoldsSerializer
                             ? new StorageEntry(objectId, c.Key, c.SerializerAndObjectId.ObjectId)
                             : new StorageEntry(objectId, c.Key, c.Value)
-                    ).ToList();
+                    ).ToList(); //TODO remove ToList invocation
             
                 _changes.AddRange(instanceChanges);
 
-                var instanceRemoved = map
+                var removedInstances = map
                     .PullRemovedKeys()
                     .Select(k => new ObjectIdAndKey(objectId, k))
-                    .ToList();
+                    .ToList(); //TODO remove ToList invocation
                
-                _removed.AddRange(instanceRemoved);
+                _removed.AddRange(removedInstances);
             }
 
             public record DetectedChangesAndReachableIds(DetectedChanges DetectedChanges, ISet<long> ReachableObjectIds);

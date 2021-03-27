@@ -231,5 +231,7 @@ namespace Cleipnir.Helpers
             foreach (var t in toAdd)
                 set.Add(t);
         }
+
+        public static T CastTo<T>(this object o) => (T) o;
     }
 }

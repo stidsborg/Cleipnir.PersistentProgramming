@@ -7,13 +7,15 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
 {
     internal class D
     {
-        private readonly Queue<long> _serializationQueue = new Queue<long>();
+        private readonly Queue<long> _deserializationQueue = new();
 
         private readonly DictionaryWithDefault<long, List<Action<ISerializer2>>> _resolvedListeners 
             = new(_ => new List<Action<ISerializer2>>());
 
         private readonly Dictionary<long, RMap> _rMaps = new();
         private readonly Dictionary<long, ISerializer2> _serializersDictionary = new ();
+
+        private readonly Path _path = new();
         
         private readonly StoredState _storedState;
         
@@ -21,10 +23,10 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
         
         private readonly Ephemerals _emphereals;
 
-        public D(StoredState storedState, Ephemerals emphereals, SerializerFactories serializerFactories)
+        private D(StoredState storedState, Ephemerals ephemerals, SerializerFactories serializerFactories)
         {
             _storedState = storedState;
-            _emphereals = emphereals;
+            _emphereals = ephemerals;
             _serializerFactories = serializerFactories;
         }
         
@@ -39,9 +41,9 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
         public DeserializedState Deserialize()
         {
             var roots = (Roots2) Deserialize(Roots2.ObjectId).Instance;
-            while (_serializationQueue.Count > 0)
-                _ = Deserialize(_serializationQueue.Dequeue());
-            
+            while (_deserializationQueue.Count > 0)
+                _ = Deserialize(_deserializationQueue.Dequeue());
+
             foreach (var (key, listeners) in _resolvedListeners)
             {
                 var serializer = _serializersDictionary[key];
@@ -54,18 +56,23 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
             {
                 var map = new Map2(mapAndSerializers, rMap.GetDeserializedValues());
                 mapAndSerializers.Add(
-                    objectId, 
+                    objectId,
                     _serializersDictionary[objectId],
                     map
                 );
             }
-            
+
             return new DeserializedState(roots, mapAndSerializers);
-        } 
-        public ISerializer2 Deserialize(long objectId)
+        }
+
+        internal ISerializer2 Deserialize(long objectId)
         {
             if (_serializersDictionary.ContainsKey(objectId))
                 return _serializersDictionary[objectId];
+            
+            var (isCircular, path) = _path.Push(objectId);
+            if (isCircular)
+                throw new CircularDependencyException2(path, _storedState.StorageEntries);
 
             var storageEntries = _storedState.StorageEntries[objectId];
 
@@ -75,16 +82,18 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
             //find deserialization method on deserializer
             var serializerType = _storedState.Serializers[objectId];
             var factory = _serializerFactories.Find(serializerType);
-            var serializer = factory.CreateFrom(rMap, _emphereals);
+            var serializer = factory.CreateSerializer(rMap, _emphereals);
             _serializersDictionary[objectId] = serializer;
 
+            _path.Pop();
+            
             return serializer;
         }
 
         public void RegisterCallbackWhenResolved(long objectId, Action<ISerializer2> callback)
         {
             _resolvedListeners[objectId].Add(callback);
-            _serializationQueue.Enqueue(objectId);
+            _deserializationQueue.Enqueue(objectId);
         }
     }
 

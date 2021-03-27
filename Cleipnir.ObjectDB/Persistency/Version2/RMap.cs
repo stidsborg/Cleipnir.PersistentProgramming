@@ -17,6 +17,8 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
             _deserializer = deserializer;
             _storageEntries = storageEntries.ToDictionary(e => e.Key, e => e);
         }
+
+        public object this[string key] => Get<object>(key);
         
         public T Get<T>(string name)
         {

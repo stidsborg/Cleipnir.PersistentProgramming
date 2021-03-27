@@ -1,5 +1,7 @@
 using System.Linq;
 using Cleipnir.ObjectDB.Persistency.Version2;
+using Cleipnir.ObjectDB.Persistency.Version2.Serializers;
+using Cleipnir.ObjectDB.Persistency.Version2.Serializers.Persistable;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 
@@ -11,7 +13,7 @@ namespace Cleipnir.Tests.ObjectStore
         [TestMethod]
         public void MapWithExistingSimpleValueDetectsChangesInValue()
         {
-            var mps = new MapAndSerializers(new SerializerFactories(new[] {new PersistableSerializer2()}));
+            var mps = new MapAndSerializers(SerializerFactories.Default);
             var existingValues = new[]
             {
                 SerializerOrValue.CreateValue("Name", "Peter")
@@ -36,9 +38,9 @@ namespace Cleipnir.Tests.ObjectStore
         [TestMethod]
         public void MapWithExistingReferencedValueDetectsChangesInValue()
         {
-            var mps = new MapAndSerializers(new SerializerFactories(new[] {new PersistableSerializer2()}));
+            var mps = new MapAndSerializers(SerializerFactories.Default);
             var peter = new Person() {Name = "Peter"};
-            var peterSerializer = new PersistableSerializer2(peter);
+            var peterSerializer = new PersistableSerializer2(peter, false);
             mps.Add(0, peterSerializer, new Map2(mps));
             
             var ole = new Person {Name = "Ole"};

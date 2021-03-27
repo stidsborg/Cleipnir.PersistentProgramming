@@ -1,4 +1,6 @@
 using Cleipnir.ObjectDB.Persistency.Version2;
+using Cleipnir.ObjectDB.Persistency.Version2.Serializers;
+using Cleipnir.ObjectDB.Persistency.Version2.Serializers.Persistable;
 
 namespace Cleipnir.Tests.ObjectStore
 {

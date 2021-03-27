@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cleipnir.ObjectDB.Persistency.Version2;
+using Cleipnir.ObjectDB.Persistency.Version2.Serializers.Persistable;
 using Cleipnir.StorageEngine;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
@@ -17,8 +18,7 @@ namespace Cleipnir.Tests.ObjectStore
             //arrange
             var testStorage = new TestStorageEngine();
             var eps = new Ephemerals();
-            var s = new PersistableSerializer2();
-            var factories = new SerializerFactories(new List<ISerializerFactory>() {s});
+            var factories = SerializerFactories.Default;
 
             //act
             var state = D.Load(testStorage, eps, factories);
@@ -59,9 +59,9 @@ namespace Cleipnir.Tests.ObjectStore
                     .Append(new StorageEntry(2, "Other", 1L))
                     .Append(new StorageEntry(2, "¡Type", typeof(Person).SimpleQualifiedName()));
 
-                serializers[0] = typeof(PersistableSerializer2);
-                serializers[1] = typeof(PersistableSerializer2);
-                serializers[2] = typeof(PersistableSerializer2);
+                serializers[0] = typeof(PersistableSerializerFactory);
+                serializers[1] = typeof(PersistableSerializerFactory);
+                serializers[2] = typeof(PersistableSerializerFactory);
 
                 return new StoredState(serializers, entries);
             }
