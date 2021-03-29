@@ -1,7 +1,6 @@
 using System.Linq;
-using Cleipnir.ObjectDB.Persistency.Version2;
-using Cleipnir.ObjectDB.Persistency.Version2.Serializers;
-using Cleipnir.ObjectDB.Persistency.Version2.Serializers.Persistable;
+using Cleipnir.ObjectDB.Version2.Persistency;
+using Cleipnir.ObjectDB.Version2.Persistency.Serializers.Persistable;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 

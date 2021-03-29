@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cleipnir.Helpers;
 
-namespace Cleipnir.ObjectDB.Persistency.Version2
+namespace Cleipnir.ObjectDB.Version2.Persistency
 {
     public class Ephemerals : IEnumerable<object>
     {

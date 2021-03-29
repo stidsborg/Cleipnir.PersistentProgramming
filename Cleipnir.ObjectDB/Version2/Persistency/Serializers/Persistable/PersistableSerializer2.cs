@@ -1,6 +1,6 @@
 using Cleipnir.StorageEngine;
 
-namespace Cleipnir.ObjectDB.Persistency.Version2.Serializers.Persistable
+namespace Cleipnir.ObjectDB.Version2.Persistency.Serializers.Persistable
 {
     public class PersistableSerializer2 : ISerializer2
     {
@@ -19,7 +19,7 @@ namespace Cleipnir.ObjectDB.Persistency.Version2.Serializers.Persistable
         {
             if (!_serialized)
             {
-                m.Set("¡Type", _persistable.GetType().SimpleQualifiedName());
+                m["¡Type"] = _persistable.GetType().SimpleQualifiedName();
                 _serialized = true;
             }
             

@@ -1,7 +1,7 @@
 using System.Linq;
 using Cleipnir.Helpers;
-using Cleipnir.ObjectDB.Persistency.Version2;
-using Cleipnir.ObjectDB.Persistency.Version2.Serializers.Persistable;
+using Cleipnir.ObjectDB.Version2.Persistency;
+using Cleipnir.ObjectDB.Version2.Persistency.Serializers.Persistable;
 using Cleipnir.StorageEngine.InMemory;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
@@ -34,7 +34,7 @@ namespace Cleipnir.Tests.ObjectStore
 
             try
             {
-                D.Load(storageEngine, new Ephemerals(), serializerFactories);
+                Deserializer2.Load(storageEngine, new Ephemerals(), serializerFactories);
             } 
             catch (CircularDependencyException2 e)
             {
@@ -62,7 +62,7 @@ namespace Cleipnir.Tests.ObjectStore
             var persister = new Persister2(storageEngine, mps);
             persister.DetectAndPersistChanges();
             
-            var (r, _) = D.Load(storageEngine, new Ephemerals(), serializerFactories);
+            var (r, _) = Deserializer2.Load(storageEngine, new Ephemerals(), serializerFactories);
             var p = r.Find<Person>();
             p.Name.ShouldBe("Peter");
             p.Sibling.Name.ShouldBe("Ole");

@@ -11,12 +11,12 @@ namespace Playground.PersonExample
             var storageEngine = new SimpleFileStorageEngine("./persons.jsons", true);
             var os = ObjectStore.New(storageEngine);
             
-            var parent = new Person()
+            var parent = new Person
             {
                 Name = "Ole"
             };
 
-            var child = new Person()
+            var child = new Person
             {
                 Name = "Peter",
                 Parent = parent

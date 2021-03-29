@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace Cleipnir.ObjectDB.Persistency.Version2.Serializers.Persistable
+namespace Cleipnir.ObjectDB.Version2.Persistency.Serializers.Persistable
 {
     public class PersistableSerializerFactory : ISerializerFactory
     {

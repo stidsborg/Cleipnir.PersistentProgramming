@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using Cleipnir.StorageEngine;
 
-namespace Cleipnir.ObjectDB.Persistency.Version2
+namespace Cleipnir.ObjectDB.Version2.Persistency
 {
     public class RMap
     {
-        private readonly D _deserializer;
+        private readonly Deserializer2 _deserializer;
         private readonly Dictionary<string, StorageEntry> _storageEntries;
 
         private readonly Dictionary<string, SerializerOrValue> _resolvedValues = new();
         
-        internal RMap(D deserializer, IEnumerable<StorageEntry> storageEntries)
+        internal RMap(Deserializer2 deserializer, IEnumerable<StorageEntry> storageEntries)
         {
             _deserializer = deserializer;
             _storageEntries = storageEntries.ToDictionary(e => e.Key, e => e);

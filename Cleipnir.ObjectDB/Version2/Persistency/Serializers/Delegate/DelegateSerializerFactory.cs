@@ -1,6 +1,6 @@
 using System;
 
-namespace Cleipnir.ObjectDB.Persistency.Version2.Serializers.Delegate
+namespace Cleipnir.ObjectDB.Version2.Persistency.Serializers.Delegate
 {
     internal class DelegateSerializerFactory : ISerializerFactory
     {

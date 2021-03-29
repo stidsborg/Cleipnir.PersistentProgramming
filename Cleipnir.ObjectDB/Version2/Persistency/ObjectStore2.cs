@@ -1,6 +1,6 @@
 using Cleipnir.StorageEngine;
 
-namespace Cleipnir.ObjectDB.Persistency.Version2
+namespace Cleipnir.ObjectDB.Version2.Persistency
 {
     public class ObjectStore2
     {
@@ -34,7 +34,7 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
 
         public static ObjectStore2 Load(IStorageEngine storageEngine, params object[] ephemeralInstances)
         {
-            var (roots, mapAndSerializers) = D.Load(
+            var (roots, mapAndSerializers) = Deserializer2.Load(
                 storageEngine,
                 new Ephemerals(ephemeralInstances),
                 new SerializerFactories(SerializerFactories.DefaultFactories)

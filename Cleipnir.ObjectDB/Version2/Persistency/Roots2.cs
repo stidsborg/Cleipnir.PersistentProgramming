@@ -1,10 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Cleipnir.ObjectDB.Persistency.Version2.Serializers;
-using Cleipnir.ObjectDB.Persistency.Version2.Serializers.Persistable;
+using Cleipnir.ObjectDB.Version2.Persistency.Serializers.Persistable;
 
-namespace Cleipnir.ObjectDB.Persistency.Version2
+namespace Cleipnir.ObjectDB.Version2.Persistency
 {
     internal class Roots2 : IRoots2, IPersistable2
     {

@@ -1,18 +1,17 @@
-using Cleipnir.ObjectDB.Persistency.Version2;
-using Cleipnir.ObjectDB.Persistency.Version2.Serializers;
-using Cleipnir.ObjectDB.Persistency.Version2.Serializers.Persistable;
+using Cleipnir.ObjectDB.Version2.Persistency;
+using Cleipnir.ObjectDB.Version2.Persistency.Serializers.Persistable;
 
 namespace Cleipnir.Tests.ObjectStore
 {
     public class Person : IPersistable2
     {
         public string Name { get; set; }
-        public Person Other { get; set; }
+        public Person Relationship { get; set; }
         
         public void Serialize(Map2 m)
         {
             m[nameof(Name)] = Name;
-            m[nameof(Other)] = Other;
+            m[nameof(Relationship)] = Relationship;
         }
 
         private static Person Deserialize(RMap rm)
@@ -22,7 +21,7 @@ namespace Cleipnir.Tests.ObjectStore
                 Name = rm.Get<string>(nameof(Name))
             };
 
-            rm.WhenResolved<Person>(nameof(Other), p => person.Other = p);
+            rm.WhenResolved<Person>(nameof(Relationship), p => person.Relationship = p);
             return person;
         }
     }

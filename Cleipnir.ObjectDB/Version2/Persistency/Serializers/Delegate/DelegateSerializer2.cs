@@ -1,6 +1,6 @@
 using Cleipnir.StorageEngine;
 
-namespace Cleipnir.ObjectDB.Persistency.Version2.Serializers.Delegate
+namespace Cleipnir.ObjectDB.Version2.Persistency.Serializers.Delegate
 {
     public class DelegateSerializer2 : ISerializer2
     {

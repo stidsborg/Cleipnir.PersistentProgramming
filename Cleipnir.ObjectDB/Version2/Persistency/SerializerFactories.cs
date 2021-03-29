@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Cleipnir.ObjectDB.Persistency.Version2.Serializers.Delegate;
-using Cleipnir.ObjectDB.Persistency.Version2.Serializers.Persistable;
+using Cleipnir.ObjectDB.Version2.Persistency.Serializers.Delegate;
+using Cleipnir.ObjectDB.Version2.Persistency.Serializers.DisplayClass;
+using Cleipnir.ObjectDB.Version2.Persistency.Serializers.Persistable;
 
-namespace Cleipnir.ObjectDB.Persistency.Version2
+namespace Cleipnir.ObjectDB.Version2.Persistency
 {
     public class SerializerFactories
     {
@@ -24,7 +25,10 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
             => _factories.First(f => f.GetType() == type);
 
         internal static IEnumerable<ISerializerFactory> DefaultFactories { get; } =
-            new ISerializerFactory[] {new DelegateSerializerFactory(), new PersistableSerializerFactory()};
+            new ISerializerFactory[]
+            {
+                new DelegateSerializerFactory(), new PersistableSerializerFactory(), new DisplayClassSerializerFactory()
+            };
         
         internal static SerializerFactories Default { get; } = new SerializerFactories(DefaultFactories);
     }

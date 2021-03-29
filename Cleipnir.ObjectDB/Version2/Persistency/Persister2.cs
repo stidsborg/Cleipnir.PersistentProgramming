@@ -3,7 +3,7 @@ using System.Linq;
 using Cleipnir.Helpers;
 using Cleipnir.StorageEngine;
 
-namespace Cleipnir.ObjectDB.Persistency.Version2
+namespace Cleipnir.ObjectDB.Version2.Persistency
 {
     internal class Persister2
     {

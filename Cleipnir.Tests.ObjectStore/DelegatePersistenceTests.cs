@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Cleipnir.ObjectDB.Persistency.Version2;
+using Cleipnir.ObjectDB.Version2.Persistency;
 using Cleipnir.StorageEngine.InMemory;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Cleipnir.ObjectDB.Persistency.Version2
+namespace Cleipnir.ObjectDB.Version2.Persistency
 {
     public class Map2
     {
@@ -10,7 +10,7 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
 
         private readonly Dictionary<string, Entry> _entries = new();
 
-        private Dictionary<string, SerializerOrValue> _changedEntries = new();
+        private readonly Dictionary<string, SerializerOrValue> _changedEntries = new();
         private readonly Dictionary<string, SerializerAndObjectId> _serializables = new();
         private readonly HashSet<string> _removedKeys = new();
 
@@ -90,6 +90,10 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
             _changedEntries.Remove(key);
             _removedKeys.Add(key);
         }
+
+        public bool IsSerializable(object o)
+            => IsPrimitive(o) || _mapAndSerializers.IsSerializable(o);
+        
 
         private static bool IsPrimitive(object o)
             => o == null || o.GetType().IsPrimitive || o is DateTime || o is string || o is Guid;

@@ -1,6 +1,4 @@
-using Cleipnir.ObjectDB.Persistency.Version2;
-using Cleipnir.ObjectDB.Persistency.Version2.Serializers;
-using Cleipnir.ObjectDB.Persistency.Version2.Serializers.Persistable;
+using Cleipnir.ObjectDB.Version2.Persistency;
 using Cleipnir.StorageEngine.InMemory;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
@@ -25,12 +23,12 @@ namespace Cleipnir.Tests.ObjectStore
             var persister = new Persister2(storageEngine, mps);
             persister.DetectAndPersistChanges();
 
-            var deserializedState = D.Load(storageEngine, new Ephemerals(), serializerFactories);
+            var deserializedState = Deserializer2.Load(storageEngine, new Ephemerals(), serializerFactories);
 
             var deserializedPerson = deserializedState.Roots.Find<Person>();
             
             deserializedPerson.Name.ShouldBe("Peter");
-            deserializedPerson.Other.ShouldBeNull();
+            deserializedPerson.Relationship.ShouldBeNull();
         }
     }
 }

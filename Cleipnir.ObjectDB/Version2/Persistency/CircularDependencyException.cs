@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cleipnir.StorageEngine;
 
-namespace Cleipnir.ObjectDB.Persistency.Version2
+namespace Cleipnir.ObjectDB.Version2.Persistency
 {
     public sealed class CircularDependencyException2 : Exception
     {

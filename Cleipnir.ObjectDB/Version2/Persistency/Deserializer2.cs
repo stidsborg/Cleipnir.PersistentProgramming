@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Cleipnir.ObjectDB.Helpers.DataStructures;
 using Cleipnir.StorageEngine;
 
-namespace Cleipnir.ObjectDB.Persistency.Version2
+namespace Cleipnir.ObjectDB.Version2.Persistency
 {
-    internal class D
+    internal class Deserializer2
     {
         private readonly Queue<long> _deserializationQueue = new();
 
@@ -23,7 +23,7 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
         
         private readonly Ephemerals _emphereals;
 
-        private D(StoredState storedState, Ephemerals ephemerals, SerializerFactories serializerFactories)
+        private Deserializer2(StoredState storedState, Ephemerals ephemerals, SerializerFactories serializerFactories)
         {
             _storedState = storedState;
             _emphereals = ephemerals;
@@ -34,7 +34,7 @@ namespace Cleipnir.ObjectDB.Persistency.Version2
         {
             var storedState = storageEngine.Load();
 
-            var d = new D(storedState, ephemerals, serializerFactories);
+            var d = new Deserializer2(storedState, ephemerals, serializerFactories);
             return d.Deserialize();
         }
 

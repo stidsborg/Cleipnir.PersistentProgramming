@@ -1,4 +1,4 @@
-namespace Cleipnir.ObjectDB.Persistency.Version2
+namespace Cleipnir.ObjectDB.Version2.Persistency
 {
     public interface ISerializerFactory
     {

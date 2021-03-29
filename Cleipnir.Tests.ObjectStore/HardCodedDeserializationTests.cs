@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Cleipnir.ObjectDB.Persistency.Version2;
-using Cleipnir.ObjectDB.Persistency.Version2.Serializers.Persistable;
+using Cleipnir.ObjectDB.Version2.Persistency;
+using Cleipnir.ObjectDB.Version2.Persistency.Serializers.Persistable;
 using Cleipnir.StorageEngine;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
@@ -21,15 +21,15 @@ namespace Cleipnir.Tests.ObjectStore
             var factories = SerializerFactories.Default;
 
             //act
-            var state = D.Load(testStorage, eps, factories);
+            var state = Deserializer2.Load(testStorage, eps, factories);
 
             //assert
             state.ShouldNotBeNull();
 
             var peter = (Person) state.Roots.Single(o => o is Person p && p.Name == "Peter");
             var ole = (Person) state.Roots.Single(o => o is Person p && p.Name == "Ole");
-            peter.Other.ShouldBe(ole);
-            ole.Other.ShouldBe(peter);
+            peter.Relationship.ShouldBe(ole);
+            ole.Relationship.ShouldBe(peter);
 
             (state.MapAndSerializers[0].Serializer.Instance is Roots2).ShouldBeTrue();
             (state.MapAndSerializers[1].Serializer.Instance is Person).ShouldBeTrue();
