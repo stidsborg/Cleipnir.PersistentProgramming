@@ -1,7 +1,7 @@
 using Cleipnir.ObjectDB.Version2.Persistency;
-using Cleipnir.ObjectDB.Version2.Persistency.Serializers.Persistable;
+using Cleipnir.ObjectDB.Version2.Persistency.Serializers;
 
-namespace Cleipnir.Tests.ObjectStore
+namespace Cleipnir.Tests.ObjectStore.Helpers
 {
     public class Person : IPersistable2
     {

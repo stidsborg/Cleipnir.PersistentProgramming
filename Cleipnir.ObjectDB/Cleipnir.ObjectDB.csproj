@@ -25,4 +25,8 @@
     <None Remove="License.txt" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Version2\Persistency\Serializers\Static" />
+  </ItemGroup>
+
 </Project>

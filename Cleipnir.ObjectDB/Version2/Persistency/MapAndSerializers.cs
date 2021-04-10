@@ -35,14 +35,10 @@ namespace Cleipnir.ObjectDB.Version2.Persistency
             if (_mapAndSerializers.ContainsKey(objectId))
                 return new SerializerAndObjectId(_mapAndSerializers[objectId].Serializer, objectId);
 
-            var factory = _factories.Find(instance);
-
-            if (factory == null)
-                throw new ArgumentException($"Serialization of {instance.GetType()} not supported. Did you forget to add custom serializer?");
-
-            var serializer = factory.CreateSerializer(instance);
+            var serializerFactory = _factories.FindFactory(instance);
+            var serializer = serializerFactory.CreateSerializer(instance);
             _mapAndSerializers[objectId] = new MapAndSerializer(new Map2(this), serializer);
-            _newEntries.Add(new ObjectIdAndType(objectId, factory.GetType()));
+            _newEntries.Add(new ObjectIdAndType(objectId, serializerFactory.GetType()));
 
             return new SerializerAndObjectId(serializer, objectId);
         }

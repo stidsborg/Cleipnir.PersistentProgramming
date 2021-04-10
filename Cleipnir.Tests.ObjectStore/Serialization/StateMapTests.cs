@@ -1,10 +1,10 @@
 using System.Linq;
 using Cleipnir.ObjectDB.Version2.Persistency;
-using Cleipnir.ObjectDB.Version2.Persistency.Serializers.Persistable;
+using Cleipnir.ObjectDB.Version2.Persistency.Serializers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 
-namespace Cleipnir.Tests.ObjectStore
+namespace Cleipnir.Tests.ObjectStore.Serialization
 {
     [TestClass]
     public class StateMapTests
@@ -39,7 +39,8 @@ namespace Cleipnir.Tests.ObjectStore
         {
             var mps = new MapAndSerializers(SerializerFactories.Default);
             var peter = new Person() {Name = "Peter"};
-            var peterSerializer = new PersistableSerializer2(peter, false);
+            ISerializerFactory serializerFactory = new PersistableSerializer2();
+            var peterSerializer = serializerFactory.CreateSerializer(peter);
             mps.Add(0, peterSerializer, new Map2(mps));
             
             var ole = new Person {Name = "Ole"};

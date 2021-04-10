@@ -2,8 +2,8 @@ namespace Cleipnir.ObjectDB.Version2.Persistency
 {
     public interface ISerializerFactory
     {
-        ISerializer2 CreateSerializer(object instance);
         bool CanSerialize(object instance);
+        ISerializer2 CreateSerializer(object instance);
         ISerializer2 CreateSerializer(RMap rm, Ephemerals eps);
     }
     

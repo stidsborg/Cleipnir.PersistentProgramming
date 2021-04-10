@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
 
-namespace Cleipnir.ObjectDB.Version2.Persistency.Serializers.DisplayClass
+namespace Cleipnir.ObjectDB.Version2.Persistency
 {
     internal static class ReflectiveSerializer
     {

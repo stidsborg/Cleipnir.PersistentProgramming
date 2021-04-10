@@ -1,12 +1,12 @@
 using System.Linq;
 using Cleipnir.Helpers;
 using Cleipnir.ObjectDB.Version2.Persistency;
-using Cleipnir.ObjectDB.Version2.Persistency.Serializers.Persistable;
+using Cleipnir.ObjectDB.Version2.Persistency.Serializers;
 using Cleipnir.StorageEngine.InMemory;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 
-namespace Cleipnir.Tests.ObjectStore
+namespace Cleipnir.Tests.ObjectStore.Deserialization
 {
     [TestClass]
     public class CircularityTests

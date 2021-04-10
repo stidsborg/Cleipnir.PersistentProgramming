@@ -76,9 +76,14 @@ namespace Cleipnir.Helpers
         public static void ForEach<T>(this IEnumerable<T> ts, Action<T> f)
         {
             foreach (var t in ts)
-            {
                 f(t);
-            }
+        }
+        
+        public static void ForEach<T>(this IEnumerable<T> ts, Action<T, int> f)
+        {
+            var i = 0;
+            foreach (var t in ts)
+                f(t, i++);
         }
 
         public static IEnumerable<int> RangeUntil(int to, int from = 1)

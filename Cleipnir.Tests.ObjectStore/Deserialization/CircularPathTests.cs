@@ -2,7 +2,7 @@ using Cleipnir.ObjectDB.Version2.Persistency;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 
-namespace Cleipnir.Tests.ObjectStore
+namespace Cleipnir.Tests.ObjectStore.Deserialization
 {
     [TestClass]
     public class CircularPathTests

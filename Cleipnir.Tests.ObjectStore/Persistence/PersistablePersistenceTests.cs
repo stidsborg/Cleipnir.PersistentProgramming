@@ -1,12 +1,13 @@
 using Cleipnir.ObjectDB.Version2.Persistency;
 using Cleipnir.StorageEngine.InMemory;
+using Cleipnir.Tests.ObjectStore.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 
-namespace Cleipnir.Tests.ObjectStore
+namespace Cleipnir.Tests.ObjectStore.Persistence
 {
     [TestClass]
-    public class PersistenceTests
+    public class PersistablePersistenceTests
     {
         [TestMethod]
         public void SerializeAndDeserializeStateWorksInSimpleCase()

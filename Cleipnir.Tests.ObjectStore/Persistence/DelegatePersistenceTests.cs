@@ -5,7 +5,7 @@ using Cleipnir.StorageEngine.InMemory;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 
-namespace Cleipnir.Tests.ObjectStore
+namespace Cleipnir.Tests.ObjectStore.Persistence
 {
     [TestClass]
     public class DelegatePersistenceTests

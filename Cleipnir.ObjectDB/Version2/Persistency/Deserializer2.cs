@@ -81,7 +81,7 @@ namespace Cleipnir.ObjectDB.Version2.Persistency
             
             //find deserialization method on deserializer
             var serializerType = _storedState.Serializers[objectId];
-            var factory = _serializerFactories.Find(serializerType);
+            var factory = _serializerFactories.CreateSerializerFactory(serializerType);
             var serializer = factory.CreateSerializer(rMap, _emphereals);
             _serializersDictionary[objectId] = serializer;
 

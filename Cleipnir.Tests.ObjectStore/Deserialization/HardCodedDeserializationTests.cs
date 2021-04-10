@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cleipnir.ObjectDB.Version2.Persistency;
-using Cleipnir.ObjectDB.Version2.Persistency.Serializers.Persistable;
+using Cleipnir.ObjectDB.Version2.Persistency.Serializers;
 using Cleipnir.StorageEngine;
+using Cleipnir.Tests.ObjectStore.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 
-namespace Cleipnir.Tests.ObjectStore
+namespace Cleipnir.Tests.ObjectStore.Deserialization
 {
     [TestClass]
     public class HardCodedDeserializationTests
@@ -51,17 +52,17 @@ namespace Cleipnir.Tests.ObjectStore
                 entries[1] = Enumerable
                     .Empty<StorageEntry>()
                     .Append(new StorageEntry(1, "Name", "Peter"))
-                    .Append(new StorageEntry(1, "Other", 2L))
+                    .Append(new StorageEntry(1, "Relationship", 2L))
                     .Append(new StorageEntry(1, "¡Type", typeof(Person).SimpleQualifiedName()));
                 entries[2] = Enumerable
                     .Empty<StorageEntry>()
                     .Append(new StorageEntry(2, "Name", "Ole"))
-                    .Append(new StorageEntry(2, "Other", 1L))
+                    .Append(new StorageEntry(2, "Relationship", 1L))
                     .Append(new StorageEntry(2, "¡Type", typeof(Person).SimpleQualifiedName()));
 
-                serializers[0] = typeof(PersistableSerializerFactory);
-                serializers[1] = typeof(PersistableSerializerFactory);
-                serializers[2] = typeof(PersistableSerializerFactory);
+                serializers[0] = typeof(PersistableSerializer2);
+                serializers[1] = typeof(PersistableSerializer2);
+                serializers[2] = typeof(PersistableSerializer2);
 
                 return new StoredState(serializers, entries);
             }

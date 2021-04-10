@@ -1,20 +1,47 @@
 using System;
 using System.Reflection;
+using Cleipnir.StorageEngine;
 
-namespace Cleipnir.ObjectDB.Version2.Persistency.Serializers.Persistable
+namespace Cleipnir.ObjectDB.Version2.Persistency.Serializers
 {
-    public class PersistableSerializerFactory : ISerializerFactory
+    public interface IPersistable2
     {
+        void Serialize(Map2 m);
+    }
+    
+    public class PersistableSerializer2 : ISerializer2, ISerializerFactory
+    {
+        public object Instance => Persistable;
+
+        private IPersistable2 Persistable { get; init; }
+
+        private bool _serialized;
+
+        public void SerializeInto(Map2 m)
+        {
+            if (!_serialized)
+            {
+                m["¡Type"] = Persistable.GetType().SimpleQualifiedName();
+                _serialized = true;
+            }
+            
+            Persistable.Serialize(m);
+        }
+
         public bool CanSerialize(object instance) => instance is IPersistable2;
-        
-        public ISerializer2 CreateSerializer(object instance) 
-            => new PersistableSerializer2((IPersistable2) instance, false);
+
+        public ISerializer2 CreateSerializer(object instance)
+            => new PersistableSerializer2 {Persistable = (IPersistable2) instance};
 
         public ISerializer2 CreateSerializer(RMap rm, Ephemerals eps)
         {
             var type = Type.GetType(rm.Get<string>("¡Type"));
             var persistable = (IPersistable2) InvokeStaticDeserializeMethod(type, rm, eps);
-            return new PersistableSerializer2(persistable, true);
+            return new PersistableSerializer2()
+            {
+                Persistable = persistable,
+                _serialized = true
+            };
         }
         
         private static object InvokeStaticDeserializeMethod(Type type, RMap rm, Ephemerals eps)

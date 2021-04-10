@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Cleipnir.ObjectDB.Version2.Persistency.Serializers.Persistable;
+using Cleipnir.ObjectDB.Version2.Persistency.Serializers;
 
 namespace Cleipnir.ObjectDB.Version2.Persistency
 {
